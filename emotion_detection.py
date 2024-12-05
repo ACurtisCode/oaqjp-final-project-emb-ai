@@ -17,5 +17,18 @@ def emotion_detector(text_to_analyze):
     body_object = { "raw_document": { "text": text_to_analyze } }
     # Utilizing the requests library to analyze the text from the args
     response = requests.post(url, json=body_object, headers=headers, timeout=1.00)
+    # format response text as json
+    formatted_response = json.loads(response.text)
+    # create the return object of emotion scores and dominant emotion
+    return_obj = formatted_response['emotionPredictions'][0]['emotion']
 
-    return response.text
+    #determine the dominant emotion and add it to the return object
+    dominant_emotion_val = 0
+    dominant_emotion = ''
+    for key in return_obj:
+        if return_obj[key] > dominant_emotion_val:
+            dominant_emotion_val = return_obj[key]
+            dominant_emotion = key
+    return_obj['dominant_emotion'] = dominant_emotion
+
+    return return_obj
