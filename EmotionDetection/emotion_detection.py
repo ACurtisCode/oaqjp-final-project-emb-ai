@@ -17,6 +17,18 @@ def emotion_detector(text_to_analyze):
     body_object = { "raw_document": { "text": text_to_analyze } }
     # Utilizing the requests library to analyze the text from the args
     response = requests.post(url, json=body_object, headers=headers, timeout=1.00)
+
+    # Error handling for a 400 code
+    if response.status_code == 400:
+        return {
+            "anger": None, 
+            "disgust": None, 
+            "fear": None, 
+            "joy": None, 
+            "sadness": None, 
+            "dominant_emotion": None
+        }
+
     # format response text as json
     formatted_response = json.loads(response.text)
     # create the return object of emotion scores and dominant emotion

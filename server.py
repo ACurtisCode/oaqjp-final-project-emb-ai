@@ -19,7 +19,11 @@ def emotion_detect():
     text_to_analyze = request.args.get('textToAnalyze')
     emotion_response = emotion_detector(text_to_analyze)
 
-    #utilizing an f string to output the response in the desired format
+    # Error handling invalid responses
+    if emotion_response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+
+    # utilizing an f string to output the response in the desired format
     return f"""For the given statement, the system response is 'anger': {emotion_response['anger']}
                , 'disgust': {emotion_response['disgust']}, 'fear': {emotion_response['fear']}
                , 'joy': {emotion_response['joy']} and 'sadness': {emotion_response['sadness']}. 
